@@ -10,6 +10,7 @@
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "jira-dev-tool": "^1.7.61",
     "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -20,8 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "json-server": "json-server __json_server_mock__/db.json --watch --port 3001"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
