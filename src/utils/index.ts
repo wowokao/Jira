@@ -2,12 +2,14 @@ import {useEffect, useState} from "react";
 
 export const isFalsy = (value: any) => value === 0 ? false : !value
 
-export const cleanObject = (object: object) => {
+export const isVoid = (value: unknown) => value === undefined || value === null || value === ''
+
+export const cleanObject = (object: {[key:string]:unknown}) => {
     const res = {...object}
     Object.keys(res).forEach(key => {
-        // @ts-ignore
+
         const value = res[key]
-        if (isFalsy(value)) {
+        if (isVoid(value)) {
             // @ts-ignore
             delete res[key]
         }
@@ -18,7 +20,8 @@ export const cleanObject = (object: object) => {
 export const useMount = (cb: () => void) => {
     useEffect(() => {
         cb()
-    }, [cb])
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 }
 
 export const useDebounce = <T>(value:T, delay?:number) => {

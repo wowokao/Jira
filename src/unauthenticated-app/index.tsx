@@ -21,9 +21,9 @@ export const UnauthenticatedApp = () => {
                 }
                 <Divider/>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a onClick={() => setIsRegister(!isRegister)}>
+                <Button type={'link'} onClick={() => setIsRegister(!isRegister)}>
                     {isRegister ? "直接登录" : "注册新账号"}
-                </a>
+                </Button>
             </ShadowCard>
         </Container>
     )
