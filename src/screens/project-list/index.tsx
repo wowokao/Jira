@@ -3,6 +3,7 @@ import {List} from "./list";
 import {useEffect, useState} from "react";
 import {cleanObject, useDebounce, useMount} from "../../utils";
 import {useHttp} from "../../utils/http";
+import styled from "@emotion/styled";
 
 
 export const ProjectListScreen = () => {
@@ -21,8 +22,13 @@ export const ProjectListScreen = () => {
     useMount(() => {
         client('users').then(setUsers)
     })
-    return <div>
+    return <Container>
+        <h1>项目列表</h1>
         <SearchPanel param ={param} setParam={setParam} users={users}/>
         <List list={list} users={users}/>
-    </div>
+    </Container>
 }
+
+const Container = styled.div`
+    padding: 3.2rem;
+`
