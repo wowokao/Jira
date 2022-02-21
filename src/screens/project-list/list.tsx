@@ -4,9 +4,9 @@ import dayjs from "dayjs";
 import {Link} from 'react-router-dom'
 //TODO id改为number类型
 export interface Project {
-    id: string;
+    id: number;
     name: string;
-    personId: string;
+    personId: number;
     pin: boolean;
     organization: string;
     created: number
