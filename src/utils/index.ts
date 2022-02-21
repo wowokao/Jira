@@ -39,7 +39,6 @@ export const useDocumentTitle = (title: string, keepUnmount = true) =>{
 
     // const oldTitle = document.title
     const oldTitle = useRef(document.title).current
-    console.log(oldTitle)
     useEffect(() => {
         document.title = title
 
