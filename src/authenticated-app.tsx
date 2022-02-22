@@ -1,13 +1,16 @@
 import {ProjectListScreen} from "./screens/project-list";
 import {useAuth} from "./context/auth-context";
 import styled from "@emotion/styled";
-import {Row} from "./components/lib";
+import {ButtonNoPadding, Row} from "./components/lib";
 import {ReactComponent as SoftwareLogo} from './assets/software-logo.svg'
 import {Dropdown, Menu, Button} from "antd";
 import {Route, Routes} from 'react-router'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {ProjectScreen} from "screens/project";
 import {resetRoute} from "./utils";
+import {useState} from "react";
+import {ProjectModel} from "./screens/project-list/project-model";
+import {ProjectPopover} from "./components/project-popover";
 
 /**
  * react-router 和react-router-dom的关系
@@ -19,46 +22,55 @@ import {resetRoute} from "./utils";
 * 2.内容（不固定）or布局
 * */
 export const AuthenticatedApp = () => {
-
-    return <div>
-        <PageHeader/>
+    const [projectModelOpen, setProjectModelOpen] = useState(false)
+    return <Container>
+        <PageHeader setProjectModelOpen={setProjectModelOpen}/>
         <Main>
             <Router>
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectListScreen/>}/>
+                    <Route path={'/projects'} element={<ProjectListScreen setProjectModelOpen={setProjectModelOpen}/>}/>
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}/>
-                    <Route index element={<ProjectListScreen/>}/>
+                    <Route index element={<ProjectListScreen setProjectModelOpen={setProjectModelOpen}/>}/>
                 </Routes>
             </Router>
         </Main>
-    </div>
+        <ProjectModel projectModelOpen={projectModelOpen} onClose={() => setProjectModelOpen(false)}/>
+    </Container>
 }
 
-const PageHeader = () => {
-
-    const {logout, user} = useAuth()
-
+const PageHeader = (props: { setProjectModelOpen: (isOpen:boolean) => void }) => {
     return <Header between={true}>
         <HeaderLeft gap={true}>
-            <Button type={'link'} onClick={resetRoute}>
+            <ButtonNoPadding type={'link'} onClick={resetRoute}>
                 <SoftwareLogo width={'18rem'} color={'rgb(38, 132,255)'}/>
-            </Button>
-            <h2>项目</h2>
-            <h2>用户</h2>
+            </ButtonNoPadding>
+            <ProjectPopover setProjectModelOpen={props.setProjectModelOpen}/>
+            <span>用户</span>
         </HeaderLeft>
         <HeaderRight>
-            <Dropdown overlay={
-                <Menu>
-                    <Menu.Item key={'logout'}>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <Button type={'link'} onClick={logout}>登出</Button>
-                    </Menu.Item>
-                </Menu>}>
-                <Button type={'link'} onClick={e => e.preventDefault()}>Hi，{user?.name} </Button>
-            </Dropdown>
+            <User/>
         </HeaderRight>
     </Header>
 }
+
+const User = () => {
+    const {logout, user} = useAuth()
+    return <Dropdown overlay={
+        <Menu>
+            <Menu.Item key={'logout'}>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Button type={'link'} onClick={logout}>登出</Button>
+            </Menu.Item>
+        </Menu>}>
+        <Button type={'link'} onClick={e => e.preventDefault()}>Hi，{user?.name} </Button>
+    </Dropdown>
+}
+
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: 6rem 1fr;
+  height: 100vh;
+`
 
 const Header = styled(Row)`
   padding: 3.2rem;
