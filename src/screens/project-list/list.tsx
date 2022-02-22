@@ -3,7 +3,7 @@ import {Table, TableProps} from 'antd'
 import dayjs from "dayjs";
 import {Link} from 'react-router-dom'
 import {Pin} from "components/pin";
-import {useEditProject} from "./project";
+import {useEditProject} from "../../utils/project";
 
 export interface Project {
     id: number;
