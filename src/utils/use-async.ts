@@ -1,4 +1,4 @@
-import {useCallback, useState} from "react";
+import {useCallback, useReducer, useState} from "react";
 import {useMountedRef} from "./index";
 
 interface State<D> {
@@ -17,30 +17,40 @@ const defaultInitialState: State<null> = {
     error: null
 }
 
+const useSafeDispatch = <T>(dispatch:(...args:T[]) => void) => {
+    const mountedRef = useMountedRef()
+    return useCallback((...args) =>
+        (mountedRef.current?dispatch(...args): void 0), [dispatch, mountedRef])
+}
+
 export const useAsync = <D>(initialState?: State<D>,
                             initialConfig?: typeof defaultConfig
 ) => {
     const config = {...defaultConfig, ...initialConfig};
-    const [state, setState] = useState<State<D>>({
+    const [state, dispatch] = useReducer((
+        state: State<D>,
+        action: Partial<State<D>>)=>(
+            {...state,...action}),
+        {
         ...defaultInitialState,
         ...initialState
     })
 
     const [retry, setRetry] = useState(() => () => {});
 
-    const mountedRef = useMountedRef()
+    const safeDispatch = useSafeDispatch(dispatch)
 
-    const setData = useCallback((data: D) => setState({
+    const setData = useCallback((data: D) => safeDispatch({
         data,
         stat: 'success',
         error: null
-    }), [])
+    }), [safeDispatch])
 
-    const setError = useCallback((error: Error) => setState({
+    const setError = useCallback((error: Error) => safeDispatch({
         error,
         stat: 'error',
         data: null
-    }), [])
+    }), [safeDispatch])
 
     const run = useCallback(
         (promise: Promise<D>,
@@ -54,9 +64,9 @@ export const useAsync = <D>(initialState?: State<D>,
                     run(runConfig.retry(), runConfig)
                 }
             });
-            setState(prevState => ({...prevState, stat: 'loading'}))
+            safeDispatch({state:'loading'})
             return promise.then(data => {
-                if (mountedRef.current) setData(data)
+                setData(data)
                 return data
                 //catch 之后就不会抛出 需要return promise.reject
             }).catch(error => {
@@ -64,7 +74,7 @@ export const useAsync = <D>(initialState?: State<D>,
                 if (config.throwOnError) return Promise.reject(error);
                 return error;
             })
-        }, [config.throwOnError, mountedRef, setData, setError])
+        }, [config.throwOnError, safeDispatch, setData, setError])
 
     return {
         isIdle: state.stat === 'idle',
