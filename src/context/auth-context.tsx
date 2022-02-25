@@ -6,12 +6,12 @@ import {useMount} from "utils";
 import {useAsync} from "../utils/use-async";
 import {FullPageError, FullPageLoading} from "../components/lib";
 
-interface AuthForm {
+export interface AuthForm {
     username: string,
     password: string
 }
 
-const bootstrapUser = async () => {
+export const bootstrapUser = async () => {
     let user = null
     const token = auth.getToken()
     if (token) {
@@ -22,7 +22,7 @@ const bootstrapUser = async () => {
 }
 
 
-const AuthContext = React.createContext<| {
+export const AuthContext = React.createContext<| {
     user: User | null,
     register: (form: AuthForm) => Promise<void>,
     login: (form: AuthForm) => Promise<void>,

@@ -8,7 +8,6 @@ import {Route, Routes} from 'react-router'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {ProjectScreen} from "screens/project";
 import {resetRoute} from "./utils";
-import {useState} from "react";
 import {ProjectModel} from "./screens/project-list/project-model";
 import {ProjectPopover} from "./components/project-popover";
 
@@ -23,48 +22,30 @@ import {ProjectPopover} from "./components/project-popover";
 * */
 // 传JSX（component composition） 能解耦 onClick的方法和子组件， 控制反转 => 减少传递的props
 export const AuthenticatedApp = () => {
-    const [projectModelOpen, setProjectModelOpen] = useState(false)
+
     return <Container>
-        <PageHeader
-            projectButton={
-                <ButtonNoPadding
-                    onClick={() => setProjectModelOpen(true)}
-                    type={"link"}>创建项目
-                </ButtonNoPadding>
-            }/>
+        <PageHeader/>
         <Main>
             <Router>
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectListScreen
-                        projectButton={
-                            <ButtonNoPadding
-                                onClick={() => setProjectModelOpen(true)}
-                                type={"link"}>创建项目
-                            </ButtonNoPadding>
-                        }/>}/>
+                    <Route path={'/projects'} element={<ProjectListScreen/>}/>
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}/>
                     <Route index element={<ProjectListScreen
-                        projectButton={
-                            <ButtonNoPadding
-                                onClick={() => setProjectModelOpen(true)}
-                                type={"link"}>创建项目
-                            </ButtonNoPadding>
-                        }
                     />}/>
                 </Routes>
             </Router>
         </Main>
-        <ProjectModel projectModelOpen={projectModelOpen} onClose={() => setProjectModelOpen(false)}/>
+        <ProjectModel />
     </Container>
 }
 
-const PageHeader = (props: { projectButton: JSX.Element }) => {
+const PageHeader = () => {
     return <Header between={true}>
         <HeaderLeft gap={true}>
             <ButtonNoPadding type={'link'} onClick={resetRoute}>
                 <SoftwareLogo width={'18rem'} color={'rgb(38, 132,255)'}/>
             </ButtonNoPadding>
-            <ProjectPopover {...props}/>
+            <ProjectPopover />
             <span>用户</span>
         </HeaderLeft>
         <HeaderRight>
