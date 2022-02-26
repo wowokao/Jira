@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import {Pin} from "components/pin";
 import {useEditProject} from "../../utils/project";
 import {ButtonNoPadding} from "../../components/lib";
+import {useProjectModal} from "./util";
 
 export interface Project {
     id: number;
@@ -17,14 +18,14 @@ export interface Project {
 
 interface ListProps extends TableProps<Project> {
     users: User[],
-    refresh?: () => void;
-
 }
 
 export const List = ({users, ...props}: ListProps) => {
     const {mutate} = useEditProject()
+    const {startEdit} = useProjectModal()
     //const pinProject = (id: number, pin: boolean) => mutate({id, pin}) 克里化 => Point Free
-    const pinProject = (id:number) => (pin:boolean) => mutate({id, pin}).then(props.refresh)
+    const pinProject = (id: number) => (pin: boolean) => mutate({id, pin})
+    const editProject = (id: number) => () => startEdit(id)
     return <Table
         rowKey={'id'}
         pagination={false}
@@ -66,10 +67,12 @@ export const List = ({users, ...props}: ListProps) => {
                 }
             },
             {
-                render(){
-                    return <Dropdown overlay={<Menu>
-                        <Menu.Item key={'edit'}/>
-                    </Menu>}>
+                render(value, project) {
+                    return <Dropdown overlay={
+                        <Menu>
+                            <Menu.Item onClick={editProject(project.id)} key={'edit'}>编辑</Menu.Item>
+                            <Menu.Item key={'delete'}>删除</Menu.Item>
+                        </Menu>}>
                         <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
                     </Dropdown>
                 }

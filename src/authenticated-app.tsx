@@ -8,7 +8,7 @@ import {Route, Routes} from 'react-router'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {ProjectScreen} from "screens/project";
 import {resetRoute} from "./utils";
-import {ProjectModel} from "./screens/project-list/project-model";
+import {ProjectModal} from "./screens/project-list/project-model";
 import {ProjectPopover} from "./components/project-popover";
 
 /**
@@ -32,7 +32,7 @@ export const AuthenticatedApp = () => {
                     <Route index element={<ProjectListScreen/>}/>
                 </Routes>
             </Main>
-            <ProjectModel/>
+            <ProjectModal/>
         </Router>
     </Container>
 }

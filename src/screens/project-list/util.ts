@@ -1,5 +1,7 @@
 import {useUrlQueryParam} from "../../utils/url";
 import {useMemo} from "react";
+import {useProject} from "../../utils/project";
+import {useSearchParams} from "react-router-dom";
 
 export const useProjectSearchParam = () => {
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
@@ -13,13 +15,21 @@ export const useProjectModal = () => {
     const [{projectCreate}, setProjectCreate] = useUrlQueryParam([
         'projectCreate'
     ])
+    const [, setUrlParams] = useSearchParams();
+    const [{editingProjectId}, setEditingProjectId] = useUrlQueryParam(['editingProjectId'])
+    const close = () => setUrlParams({ projectCreate: "", editingProjectId: "" });
+    const {data: editingProject, isLoading} = useProject(Number(editingProjectId))
 
     const open = () => setProjectCreate({projectCreate: true})
-    const close = () => setProjectCreate({projectCreate: undefined})
+
+    const startEdit = (id: number) => setEditingProjectId({editingProjectId: id})
     // 返回内容三个以及一下， 用tuple， 大于三个用对象(但是名字被限制住了)。
     return {
-        projectModalOpen: projectCreate === 'true',
+        projectModalOpen: projectCreate === 'true' || Boolean(editingProject ),
         open,
-        close
+        close,
+        startEdit,
+        editingProject,
+        isLoading
     }
 }
