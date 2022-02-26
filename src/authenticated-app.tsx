@@ -21,7 +21,7 @@ import {ProjectPopover} from "./components/project-popover";
 * 2.内容（不固定）or布局
 * */
 // 传JSX（component composition） 能解耦 onClick的方法和子组件， 控制反转 => 减少传递的props
-export const AuthenticatedApp = () => {
+const AuthenticatedApp = () => {
     return <Container>
         <Router>
             <PageHeader/>
@@ -82,3 +82,5 @@ const HeaderRight = styled(Row)``
 const Main = styled.main`
   height: calc(100vh - 6rem);
 `
+
+export default AuthenticatedApp

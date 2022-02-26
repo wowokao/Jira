@@ -9,7 +9,7 @@ import right from 'assets/right.svg'
 import {useDocumentTitle} from "../utils";
 import {ErrorBox} from "../components/lib";
 
-export const UnauthenticatedApp = () => {
+const UnauthenticatedApp = () => {
     const [isRegister, setIsRegister] = useState(false)
     const [error, setError] = useState<Error | null>(null)
 
@@ -80,3 +80,5 @@ const ShadowCard = styled(Card)`
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
   text-align: center;
 `
+
+export default UnauthenticatedApp
