@@ -56,7 +56,9 @@
     "workerDirectory": "public"
   },
   "devDependencies": {
+    "@testing-library/react-hooks": "^7.0.2",
     "eslint": "^8.7.0",
-    "eslint-plugin-jest": "^26.1.1"
+    "eslint-plugin-jest": "^26.1.1",
+    "msw": "^0.38.1"
   }
 }
